@@ -1,9 +1,19 @@
 import os
+import sys
 from convertor import convertor
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice, Separator
 
-current_dir = os.path.dirname(os.path.realpath(__file__))
+def get_base_dir():
+    """Возвращает директорию, где лежит исполняемый файл (или скрипт)"""
+    if getattr(sys, 'frozen', False):
+        # PyInstaller (и --onefile, и --onedir)
+        return os.path.dirname(sys.executable)
+    else:
+        # Обычный запуск python main.py
+        return os.path.dirname(os.path.abspath(__file__))
+
+current_dir = get_base_dir()
 
 images = []
 
@@ -16,7 +26,7 @@ for img in images:
     print(os.path.basename(img))
 if len(images) == 0:
     print("No images in directory")
-    exit()
+    sys.exit(0)
 print(f"\n{len(images)} images found\n")
 input("Press any key to continue...")
 
